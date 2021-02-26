@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nagarro.servicecatalogue.dto.ResponseDto;
 import com.nagarro.servicecatalogue.dto.ServiceDescriptionDto;
 import com.nagarro.servicecatalogue.dto.ServiceInfoDto;
-import com.nagarro.servicecatalogue.service.ProductMangementService;
+import com.nagarro.servicecatalogue.service.ServiceMangementService;
 
 @RestController
 @RequestMapping("/services")
@@ -26,30 +26,30 @@ public class ServiceManagementController {
 	private static final Logger LOG = LoggerFactory.getLogger(ServiceManagementController.class);
 	
 	@Autowired
-	private ProductMangementService productMangementService;
+	private ServiceMangementService serviceMangementService;
 
 	@GetMapping("/allServices")
 	public ResponseEntity<List<ServiceInfoDto>> getAllServices() {
 		LOG.debug("Inside getAllServices method");
-		return new ResponseEntity<>(productMangementService.getAllServices(), HttpStatus.OK);
+		return new ResponseEntity<>(serviceMangementService.getAllServices(), HttpStatus.OK);
 	}
 
 	@GetMapping("/allServices/{serviceType}")
 	public ResponseEntity<List<ServiceInfoDto>> getAllServicesByServiceType(@PathVariable String serviceType) {
 		LOG.debug("Inside getAllServicesByServiceType method, serviceType:{}",serviceType);
-		return new ResponseEntity<>(productMangementService.getAllServicesByServiceType(serviceType), HttpStatus.OK);
+		return new ResponseEntity<>(serviceMangementService.getAllServicesByServiceType(serviceType), HttpStatus.OK);
 	}
 	
 	@GetMapping("/serviceDescInfo/{serviceType}/{serviceDescriptionId}")
 	public ResponseEntity<ServiceDescriptionDto> getServiceDescriptionInfo(@PathVariable String serviceType,@PathVariable String serviceDescriptionId ) {
 		LOG.debug("Inside getServiceDescriptionInfo method, serviceType:{},serviceDescriptionId:{}",serviceType,serviceDescriptionId);
-		return new ResponseEntity<>(productMangementService.getServiceDescriptionInfo(serviceType,serviceDescriptionId), HttpStatus.OK);
+		return new ResponseEntity<>(serviceMangementService.getServiceDescriptionInfo(serviceType,serviceDescriptionId), HttpStatus.OK);
 	}
 
 	@PostMapping("/addUpdateService")
 	public ResponseEntity<ResponseDto> addOrUpdateService(@RequestBody ServiceInfoDto serviceInfoDto) {
 		LOG.debug("Inside addOrUpdateProducer method, serviceInfoDto:{}",serviceInfoDto);
-		productMangementService.addOrUpdateService(serviceInfoDto);
+		serviceMangementService.addOrUpdateService(serviceInfoDto);
 		return new ResponseEntity<>(new ResponseDto("Service Added/Updated Successfully"), HttpStatus.CREATED);
 	}
 

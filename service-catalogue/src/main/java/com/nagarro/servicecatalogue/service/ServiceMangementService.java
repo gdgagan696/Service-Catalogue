@@ -5,7 +5,7 @@ import java.util.List;
 import com.nagarro.servicecatalogue.dto.ServiceDescriptionDto;
 import com.nagarro.servicecatalogue.dto.ServiceInfoDto;
 
-public interface ProductMangementService {
+public interface ServiceMangementService {
 
 	List<ServiceInfoDto> getAllServices();
 

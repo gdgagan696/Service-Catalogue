@@ -18,12 +18,12 @@ import com.nagarro.servicecatalogue.dto.ServiceInfoDto;
 import com.nagarro.servicecatalogue.enums.ServiceStockStatus;
 import com.nagarro.servicecatalogue.enums.ServiceType;
 import com.nagarro.servicecatalogue.exception.ProductCatalogueException;
-import com.nagarro.servicecatalogue.service.ProductMangementService;
+import com.nagarro.servicecatalogue.service.ServiceMangementService;
 
 @Service
-public class ProductManagementServiceImpl implements ProductMangementService {
+public class ServiceManagementServiceImpl implements ServiceMangementService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProductManagementServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ServiceManagementServiceImpl.class);
 
 	private static List<ServiceInfoDto> allServices = new ArrayList<>();
 
@@ -124,14 +124,18 @@ public class ProductManagementServiceImpl implements ProductMangementService {
 			Optional<ServiceInfoDto> updatedService = allServices.stream()
 					.filter(service -> service.getServiceId().equals(serviceInfoDto.getServiceId())).findFirst();
 			LOG.debug("Filtered updatedService method,serviceInfoDto:{}", serviceInfoDto);
+			String serviceId=updatedService.isPresent()?updatedService.get().getServiceId():UUID.randomUUID().toString();
 			serviceInfoDto.getServiceDescriptionDtos().stream()
 					.filter(serviceDesc -> Objects.isNull(serviceDesc.getServiceDescriptionId()))
-					.forEach(serviceDesc -> serviceDesc.setServiceDescriptionId(UUID.randomUUID().toString()));
+					.forEach(serviceDesc -> {
+						serviceDesc.setServiceDescriptionId(UUID.randomUUID().toString());
+						serviceDesc.setServiceId(serviceId);
+					});
 			if (updatedService.isPresent()) {
 				updatedService.get().setServiceType(serviceInfoDto.getServiceType());
 				updatedService.get().setServiceDescriptionDtos(serviceInfoDto.getServiceDescriptionDtos());
 			} else {
-				serviceInfoDto.setServiceId(UUID.randomUUID().toString());
+				serviceInfoDto.setServiceId(serviceId);
 				allServices.add(serviceInfoDto);
 			}
 		}
